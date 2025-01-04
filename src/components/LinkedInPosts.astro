@@ -1,0 +1,40 @@
+---
+// Note: You'll need to set up LinkedIn API credentials and handle OAuth
+// This is a placeholder structure that you can populate with real data
+// once you have API access
+
+interface LinkedInPost {
+  id: string;
+  content: string;
+  date: string;
+}
+
+// Placeholder data - replace with actual API call
+const posts: LinkedInPost[] = [
+  {
+    id: '1',
+    content: 'Configure LinkedIn API to see recent posts here',
+    date: new Date().toISOString(),
+  }
+];
+---
+
+<div class="space-y-4">
+  {posts.map(post => (
+    <div class="border rounded-lg p-4" key={post.id}>
+      <p class="text-gray-800">{post.content}</p>
+      <p class="text-sm text-gray-500 mt-2">
+        Posted: {new Date(post.date).toLocaleDateString()}
+      </p>
+    </div>
+  ))}
+  
+  <a 
+    href="https://www.linkedin.com/in/alex-gain/recent-activity/all/"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="inline-block mt-4 text-blue-600 hover:text-blue-800"
+  >
+    View all activity on LinkedIn →
+  </a>
+</div> 
