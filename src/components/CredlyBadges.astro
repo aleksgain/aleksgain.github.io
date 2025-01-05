@@ -5,21 +5,21 @@ const { badges } = certifications;
 
 <div class="grid grid-cols-2 gap-4">
   {badges.map((badge) => (
-    <div class="border rounded-lg p-4">
+    <div class="border dark:border-gray-700 rounded-lg p-4 transition-all hover:shadow-lg hover:scale-105 dark:bg-gray-800">
       <a 
         href={badge.url} 
         target="_blank" 
         rel="noopener noreferrer"
-        class="block"
+        class="block group"
       >
         <img
           src={badge.image_url}
           alt={badge.name}
           width="100"
           height="100"
-          class="mx-auto"
+          class="mx-auto transition-transform group-hover:scale-110"
         />
-        <h3 class="text-center mt-2 font-medium">{badge.name}</h3>
+        <h3 class="text-center mt-2 font-medium transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">{badge.name}</h3>
       </a>
     </div>
   ))}

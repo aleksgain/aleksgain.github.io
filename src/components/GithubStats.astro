@@ -49,12 +49,12 @@ try {
       <p>Unable to load GitHub data at this time.</p>
     </div>
   ) : (
-    <div class="bg-gray-50 rounded-lg p-4">
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 transition-colors">
       <h3 class="text-lg font-medium mb-2">Contributions</h3>
       <p class="text-2xl font-bold">
         {userData?.contributionsCollection.contributionCalendar.totalContributions || 0}
       </p>
-      <p class="text-sm text-gray-600">Total contributions this year</p>
+      <p class="text-sm text-gray-600 dark:text-gray-400">Total contributions this year</p>
     </div>
   )}
 </div> 

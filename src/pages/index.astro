@@ -3,7 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import SocialBar from '../components/SocialBar.astro';
 import CredlyBadges from '../components/CredlyBadges.astro';
 import GithubStats from '../components/GithubStats.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 import certifications from '../data/certifications.json';
+import skillsData from '../data/skills.json';
 
 // Fetch GitHub avatar
 const username = 'aleksgain';
@@ -40,14 +42,15 @@ try {
 ---
 
 <Layout title="Alex Gain">
+  <ThemeToggle />
   <main class="min-h-screen p-8 md:p-24">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-4xl mx-auto animate-fade-in">
       <div class="flex items-center gap-6 mb-8">
         {avatarUrl && (
           <img 
             src={avatarUrl} 
             alt="Alex Gain" 
-            class="w-24 h-24 rounded-full shadow-lg"
+            class="w-24 h-24 rounded-full shadow-lg animate-bounce-in"
           />
         )}
         <div>
@@ -80,22 +83,22 @@ try {
       
       <SocialBar />
       
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-16 text-center">
-        <div class="bg-gray-50 rounded-lg p-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-16 text-center animate-slide-up">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 transition-colors">
           <p class="text-2xl font-bold">15+</p>
-          <p class="text-sm text-gray-600">Years in Tech</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Years in Tech</p>
         </div>
-        <div class="bg-gray-50 rounded-lg p-4">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 transition-colors">
           <p class="text-2xl font-bold">{certCount}</p>
-          <p class="text-sm text-gray-600">Cloud Certifications</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Cloud Certifications</p>
         </div>
-        <div class="bg-gray-50 rounded-lg p-4">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 transition-colors">
           <p class="text-2xl font-bold">3</p>
-          <p class="text-sm text-gray-600">Cloud Platforms</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Cloud Platforms</p>
         </div>
-        <div class="bg-gray-50 rounded-lg p-4">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 transition-colors">
           <p class="text-2xl font-bold">∞</p>
-          <p class="text-sm text-gray-600">Problems Solved</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Problems Solved</p>
         </div>
       </div>
       
@@ -111,17 +114,13 @@ try {
         </section>
       </div>
 
-      <div class="flex flex-wrap gap-2 mt-16">
-        {[
-          'AWS', 'GCP', 'Kubernetes', 'Terraform', 'Docker', 
-          'CI/CD', 'DevOps', 'Cloud Security', 'Infrastructure as Code',
-          'Python', 'Node.js', 'Monitoring', 'Observability',
-          'Zero Trust', 'FinOps', 'SRE'
-        ].map(skill => (
-          <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+      <div class="flex flex-wrap gap-2 mt-16 animate-slide-up">
+        {skillsData.skills.flatMap(category => 
+          category.items.map(skill => (
+          <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm transition-colors hover:scale-105">
             {skill}
           </span>
-        ))}
+        )))}
       </div>
     </div>
   </main>

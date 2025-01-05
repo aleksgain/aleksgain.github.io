@@ -1,0 +1,32 @@
+{
+  "skills": [
+    {
+      "category": "Cloud Platforms",
+      "items": ["AWS", "GCP", "Azure"]
+    },
+    {
+      "category": "Infrastructure",
+      "items": ["Kubernetes", "Docker", "Terraform", "Infrastructure as Code"]
+    },
+    {
+      "category": "Practices",
+      "items": ["DevOps", "CI/CD", "SRE", "FinOps"]
+    },
+    {
+      "category": "AI/ML Ops",
+      "items": ["AIOps", "MLOps", "LLM Integration", "Generative AI", "ChatOps"]
+    },
+    {
+      "category": "Security",
+      "items": ["Cloud Security", "Zero Trust", "Compliance"]
+    },
+    {
+      "category": "Development",
+      "items": ["Python", "Node.js", "Bash", "Git"]
+    },
+    {
+      "category": "Operations",
+      "items": ["Monitoring", "Observability", "Incident Response"]
+    }
+  ]
+} 
