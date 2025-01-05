@@ -5,6 +5,7 @@ const token = import.meta.env.PUBLIC_GITHUB_TOKEN;
 const query = `
   query($userName:String!) { 
     user(login: $userName){
+      avatarUrl
       contributionsCollection {
         contributionCalendar {
           totalContributions
