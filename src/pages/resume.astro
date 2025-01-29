@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+const resumeContent = await Astro.glob('../resume.md');
+const resume = resumeContent[0];
+---
+
+<Layout title="Alex Gain - Resume">
+  <ThemeToggle />
+  <main class="min-h-screen p-8 md:p-24">
+    <div class="max-w-4xl mx-auto prose dark:prose-invert prose-lg animate-fade-in">
+      <resume.Content />
+      <div class="mt-8">
+        <a href="/" class="text-blue-600 hover:text-blue-800 transition-colors">← Back to Home</a>
+      </div>
+    </div>
+  </main>
+</Layout> 
