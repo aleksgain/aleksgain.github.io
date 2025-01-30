@@ -13,38 +13,8 @@ const careerStartYear = personalData.graduationYear - 1;
 const currentYear = new Date().getFullYear();
 const yearsInTech = currentYear - careerStartYear;
 
-// Fetch GitHub avatar
-const username = personalData.githubUsername;
-const token = import.meta.env.PUBLIC_GITHUB_TOKEN;
-
 // Get the number of certifications
 const certCount = certifications.badges.length;
-
-let avatarUrl = null;
-try {
-  const response = await fetch('https://api.github.com/graphql', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `query($userName:String!) { 
-        user(login: $userName){
-          avatarUrl
-        }
-      }`,
-      variables: { userName: username }
-    })
-  });
-
-  if (response.ok) {
-    const data = await response.json();
-    avatarUrl = data.data.user.avatarUrl;
-  }
-} catch (e) {
-  console.error('Error fetching GitHub avatar:', e);
-}
 ---
 
 <Layout title="Alex Gain">
@@ -52,13 +22,9 @@ try {
   <main class="min-h-screen p-8 md:p-24">
     <div class="max-w-4xl mx-auto animate-fade-in">
       <div class="flex items-center gap-6 mb-8">
-        {avatarUrl && (
-          <img 
-            src={avatarUrl} 
-            alt="Alex Gain" 
-            class="w-24 h-24 rounded-full shadow-lg animate-bounce-in"
-          />
-        )}
+        <div id="avatar-container">
+          <div class="w-24 h-24 animate-pulse bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+        </div>
         <div>
           <h1 class="text-4xl font-bold mb-4">
             Hi, I'm Alex
@@ -137,4 +103,31 @@ try {
       </div>
     </div>
   </main>
-</Layout> 
+</Layout>
+
+<script is:inline>
+  async function fetchAvatar() {
+    try {
+      const response = await fetch('/api/github-avatar.json');
+      if (response.ok) {
+        const data = await response.json();
+        const avatarUrl = data.data.user.avatarUrl;
+        const container = document.getElementById('avatar-container');
+        if (container && avatarUrl) {
+          container.innerHTML = `
+            <img 
+              src="${avatarUrl}" 
+              alt="Alex Gain" 
+              class="w-24 h-24 rounded-full shadow-lg animate-bounce-in"
+            />
+          `;
+        }
+      }
+    } catch (e) {
+      console.error('Error fetching GitHub avatar:', e);
+    }
+  }
+
+  // Fetch avatar when the page loads
+  fetchAvatar();
+</script> 

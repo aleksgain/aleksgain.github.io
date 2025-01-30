@@ -1,7 +1,7 @@
 
 ## 🔑 Environment Variables
 
-- `PUBLIC_GITHUB_TOKEN`: GitHub Personal Access Token for fetching repository data
+- `GITHUB_TOKEN`: GitHub Personal Access Token for fetching repository data
   - Generate at: https://github.com/settings/tokens
   - Required scopes: `repo`, `read:user`
 

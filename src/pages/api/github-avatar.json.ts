@@ -13,11 +13,9 @@ export const GET: APIRoute = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        query: `query($userName:String!) {
-          user(login: $userName) {
-            contributionsCollection {
-              totalCommitContributions
-            }
+        query: `query($userName:String!) { 
+          user(login: $userName){
+            avatarUrl
           }
         }`,
         variables: { userName: username }
