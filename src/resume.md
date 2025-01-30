@@ -1,6 +1,6 @@
 # Alexey Gain
 Senior Cloud Engineer / Technical Lead  
-Prague, Czechia  
+Prague, Czechia 🇨🇿  
 [{{email}}](mailto:{{email}}) | [{{phone}}](tel:{{phoneFormatted}})  
 [LinkedIn]({{linkedInUrl}}) | [GitHub](https://github.com/{{githubUsername}}) | [Personal Site](/)
 

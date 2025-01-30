@@ -1,55 +1,46 @@
 {
   "badges": [
     {
-      "id": "1",
       "name": "CKA: Certified Kubernetes Administrator",
       "image_url": "https://images.credly.com/size/340x340/images/8b8ed108-e77d-4396-ac59-2504583b9d54/cka_from_cncfsite__281_29.png",
       "url": "https://www.credly.com/badges/f4a41c41-4ba3-4057-acc3-37651250e5fd"
     },
     {
-      "id": "2",
       "name": "AWS Certified Solutions Architect – Professional",
       "image_url": "https://images.credly.com/size/340x340/images/2d84e428-9078-49b6-a804-13c15383d0de/image.png",
       "url": "https://www.credly.com/badges/c2afcd62-53fd-46cb-8676-3988b2ccc746"
     },
     {
-      "id": "3",
       "name": "AWS Certified Cloud Practitioner",
       "image_url": "https://images.credly.com/size/340x340/images/00634f82-b07f-4bbd-a6bb-53de397fc3a6/image.png",
       "url": "https://www.credly.com/badges/7747f006-c59c-4303-b483-af7a49dec783"
     },
     {
-      "id": "4",
       "name": "AWS Certified Solutions Architect – Associate",
       "image_url": "https://images.credly.com/size/340x340/images/0e284c3f-5164-4b21-8660-0d84737941bc/image.png",
       "url": "https://www.credly.com/badges/4463a173-9ba9-4cea-a2cb-720a3c6766d8"
     },
     {
-      "id": "5",
       "name": "AWS Certified Database – Specialty",
       "image_url": "https://images.credly.com/size/340x340/images/885d38e4-55c0-4c35-b4ed-694e2b26be6c/image.png",
       "url": "https://www.credly.com/badges/6f539608-ec15-43f2-80df-75662c734c3f"
     },
     {
-      "id": "6",
       "name": "Professional Cloud Architect Certification",
       "image_url": "https://images.credly.com/size/340x340/images/71c579e0-51fd-4247-b493-d2fa8167157a/image.png",
       "url": "https://www.credly.com/badges/d35827b5-84c4-49fa-aae7-ce7fcb46874a"
     },
     {
-      "id": "7",
       "name": "Associate Cloud Engineer Certification",
       "image_url": "https://images.credly.com/size/340x340/images/08096465-cbfc-4c3e-93e5-93c5aa61f23e/image.png",
       "url": "https://www.credly.com/badges/2cbe96a3-953c-4ede-9797-45413fa4bd5c"
     },
     {
-      "id": "8",
       "name": "Lacework Shield Academy | Lacework Shield Delivery Associate (Tech Enablement - Level 3)",
       "image_url": "https://media.licdn.com/dms/image/v2/C560BAQEr8VoD7Tx4ng/company-logo_200_200/company-logo_200_200/0/1676299898174/lacework_logo?e=1744243200&v=beta&t=sjiGoYoIe01Uh_sMESEejykys39cFqiokIbqDIFuJwA",
       "url": "https://lacework-partners.workramp.io/certificate/_pe_yNFVXw"
     },
     {
-      "id": "9",
       "name": "Wiz Partner Technical Accreditation",
       "image_url": "https://templates.images.credential.net/17102886634486078793911784879488.png",
       "url": "https://certified.training.wiz.io/390276d2-7dc6-409f-9221-891467bbe6d3#acc.TkmoNES0"

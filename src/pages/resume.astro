@@ -15,6 +15,36 @@ const certCount = certifications.badges.length;
 // Format phone number for tel: link
 const formattedPhone = personalData.phone.replace(/[\s()-]/g, '');
 
+// Fetch GitHub avatar
+const username = personalData.githubUsername;
+const token = import.meta.env.PUBLIC_GITHUB_TOKEN;
+
+let avatarUrl = null;
+try {
+  const response = await fetch('https://api.github.com/graphql', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `query($userName:String!) { 
+        user(login: $userName){
+          avatarUrl
+        }
+      }`,
+      variables: { userName: username }
+    })
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    avatarUrl = data.data.user.avatarUrl;
+  }
+} catch (e) {
+  console.error('Error fetching GitHub avatar:', e);
+}
+
 // Construct social URLs
 const socialUrls = {
   linkedIn: `https://www.linkedin.com/in/${personalData.linkedInUsername}`,
@@ -43,6 +73,15 @@ const content = marked(markdown);
   <ThemeToggle />
   <main class="min-h-screen p-8 md:p-24">
     <div class="max-w-4xl mx-auto">
+      {avatarUrl && (
+        <div class="flex justify-center mb-8">
+          <img 
+            src={avatarUrl} 
+            alt="Alex Gain" 
+            class="w-32 h-32 rounded-full shadow-lg animate-bounce-in"
+          />
+        </div>
+      )}
       <div class="prose dark:prose-invert prose-lg animate-fade-in" set:html={content} />
       <div class="mt-8">
         <a href="/" class="text-blue-600 hover:text-blue-800 transition-colors no-underline">← Back to Home</a>
