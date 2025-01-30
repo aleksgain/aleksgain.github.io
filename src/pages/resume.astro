@@ -1,18 +1,51 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import personalData from '../data/personal.json';
+import certifications from '../data/certifications.json';
+import { marked } from 'marked';
+import fs from 'node:fs';
 
-const resumeContent = await Astro.glob('../resume.md');
-const resume = resumeContent[0];
+// Calculate career metrics
+const careerStartYear = personalData.graduationYear - 1;
+const currentYear = new Date().getFullYear();
+const yearsInTech = currentYear - careerStartYear;
+const certCount = certifications.badges.length;
+
+// Format phone number for tel: link
+const formattedPhone = personalData.phone.replace(/[\s()-]/g, '');
+
+// Construct social URLs
+const socialUrls = {
+  linkedIn: `https://www.linkedin.com/in/${personalData.linkedInUsername}`,
+  github: `https://github.com/${personalData.githubUsername}`
+};
+
+// Read the markdown template
+const template = fs.readFileSync('src/resume.md', 'utf-8');
+
+// Replace placeholders with actual data
+const markdown = template
+  .replace(/{{email}}/g, personalData.email)
+  .replace(/{{phone}}/g, personalData.phone)
+  .replace(/{{phoneFormatted}}/g, formattedPhone)
+  .replace(/{{linkedInUsername}}/g, personalData.linkedInUsername)
+  .replace(/{{linkedInUrl}}/g, socialUrls.linkedIn)
+  .replace(/{{githubUsername}}/g, personalData.githubUsername)
+  .replace(/{{yearsInTech}}/g, yearsInTech)
+  .replace(/{{certCount}}/g, certCount);
+
+// Parse markdown to HTML
+const content = marked(markdown);
 ---
 
 <Layout title="Alex Gain - Resume">
   <ThemeToggle />
   <main class="min-h-screen p-8 md:p-24">
-    <div class="max-w-4xl mx-auto prose dark:prose-invert prose-lg animate-fade-in">
-      <resume.Content />
+    <div class="max-w-4xl mx-auto">
+      <div class="prose dark:prose-invert prose-lg animate-fade-in" set:html={content} />
       <div class="mt-8">
-        <a href="/" class="text-blue-600 hover:text-blue-800 transition-colors">← Back to Home</a>
+        <a href="/" class="text-blue-600 hover:text-blue-800 transition-colors no-underline">← Back to Home</a>
       </div>
     </div>
   </main>

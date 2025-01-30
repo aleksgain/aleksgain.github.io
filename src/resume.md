@@ -1,11 +1,11 @@
 # Alexey Gain
-**Senior Cloud Engineer / Technical Lead**  
+Senior Cloud Engineer / Technical Lead  
 Prague, Czechia  
-[alex@alexkri.net](mailto:alex@alexkri.net) | +420778449879  
-[LinkedIn](https://www.linkedin.com/in/alex-gain) | [GitHub](https://github.com/aleksgain) | [Personal Site](https://alexkri.net)
+[{{email}}](mailto:{{email}}) | [{{phone}}](tel:{{phoneFormatted}})  
+[LinkedIn]({{linkedInUrl}}) | [GitHub](https://github.com/{{githubUsername}}) | [Personal Site](/)
 
 ## Professional Summary
-Hands-on Cloud Engineer with extensive experience in AWS and Google Cloud platforms. Strong focus on infrastructure automation, system reliability, and performance optimization. Proven track record in implementing complex cloud solutions, managing technical debt, and driving operational excellence through automation and best practices.
+Experienced Technical Lead and Cloud Engineer with {{yearsInTech}}+ years in the industry and {{certCount}} cloud certifications. Hands-on Cloud Engineer with extensive experience in AWS and Google Cloud platforms. Strong focus on infrastructure automation, system reliability, and performance optimization. Proven track record in implementing complex cloud solutions, managing technical debt, and driving operational excellence through automation and best practices.
 
 ## Core Competencies
 - Infrastructure Automation & CI/CD
