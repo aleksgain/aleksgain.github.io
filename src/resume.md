@@ -5,7 +5,7 @@ Prague, Czechia 🇨🇿
 [LinkedIn]({{linkedInUrl}}) | [GitHub](https://github.com/{{githubUsername}}) | [Personal Site](/)
 
 ## Professional Summary
-Experienced Technical Lead and Cloud Engineer with {{yearsInTech}}+ years in the industry and {{certCount}} cloud certifications. Hands-on Cloud Engineer with extensive experience in AWS and Google Cloud platforms. Strong focus on infrastructure automation, system reliability, and performance optimization. Proven track record in implementing complex cloud solutions, managing technical debt, and driving operational excellence through automation and best practices.
+Experienced Technical Lead and Cloud Engineer with {{yearsInTech}}+ years in the industry and {{certCount}} cloud certifications. Hands-on Cloud Engineer with extensive experience in AWS and Google Cloud platforms. Strong focus on infrastructure automation, system reliability, performance optimization and cloud security. Proven track record in implementing complex cloud solutions, managing threats and technical debt, and driving operational excellence through automation and best practices.
 
 ## Core Competencies
 - Infrastructure Automation & CI/CD
