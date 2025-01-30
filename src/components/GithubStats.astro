@@ -1,5 +1,5 @@
 ---
-import personalData from '../data/personal.json';
+// Component Script
 ---
 
 <div id="github-stats" class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 transition-colors">
@@ -7,30 +7,10 @@ import personalData from '../data/personal.json';
   <p class="text-sm text-gray-600 dark:text-gray-400">GitHub Contributions</p>
 </div>
 
-<script>
-  const username = '{personalData.githubUsername}';
-  const token = import.meta.env.PUBLIC_GITHUB_TOKEN;
-
+<script is:inline>
   async function fetchGitHubStats() {
     try {
-      const response = await fetch('https://api.github.com/graphql', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: `query($userName:String!) {
-            user(login: $userName) {
-              contributionsCollection {
-                totalCommitContributions
-              }
-            }
-          }`,
-          variables: { userName: username }
-        })
-      });
-
+      const response = await fetch('/api/github-stats.json');
       if (response.ok) {
         const data = await response.json();
         const commits = data.data.user.contributionsCollection.totalCommitContributions;
