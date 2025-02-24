@@ -10,16 +10,28 @@
 <script is:inline>
   async function fetchGitHubStats() {
     try {
-      const response = await fetch('/api/github-stats.json');
+      // Add cache-busting query parameter and no-cache headers
+      const response = await fetch('/api/github-stats.json?' + new Date().getTime(), {
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+      
       if (response.ok) {
         const data = await response.json();
         const commits = data.data.user.contributionsCollection.totalCommitContributions;
         const statsDiv = document.getElementById('github-stats');
         if (statsDiv) {
+          // Add a subtle loading animation
+          statsDiv.classList.add('opacity-50');
           statsDiv.innerHTML = `
             <p class="text-2xl font-bold">${commits}</p>
             <p class="text-sm text-gray-600 dark:text-gray-400">GitHub Contributions</p>
           `;
+          // Remove loading state after a short delay
+          setTimeout(() => statsDiv.classList.remove('opacity-50'), 300);
         }
       }
     } catch (e) {
