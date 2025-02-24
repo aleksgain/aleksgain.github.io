@@ -40,19 +40,33 @@ const content = marked(markdown);
 ---
 
 <Layout title="Alex Gain - Resume">
-  <ThemeToggle />
-  <main class="min-h-screen p-8 md:p-24">
+  <div class="print:hidden">
+    <ThemeToggle />
+  </div>
+  <main class="min-h-screen p-8 md:p-24 print:p-8">
     <div class="max-w-4xl mx-auto">
-      <div id="avatar-container" class="flex justify-center mb-8">
+      <div id="avatar-container" class="flex justify-center mb-8 print:hidden">
         <div class="animate-pulse bg-gray-200 dark:bg-gray-700 w-32 h-32 rounded-full"></div>
       </div>
-      <div class="prose dark:prose-invert prose-lg animate-fade-in" set:html={content} />
-      <div class="mt-8">
+      <div class="prose dark:prose-invert prose-lg animate-fade-in print:!prose-neutral print:max-w-none" set:html={content} />
+      <div class="mt-8 print:hidden">
         <a href="/" class="text-blue-600 hover:text-blue-800 transition-colors no-underline">← Back to Home</a>
       </div>
     </div>
   </main>
 </Layout>
+
+<style>
+  @media print {
+    html {
+      font-size: 12px;
+    }
+    
+    @page {
+      margin: 1.5cm;
+    }
+  }
+</style>
 
 <script is:inline>
   async function fetchAvatar() {
