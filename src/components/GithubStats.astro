@@ -29,4 +29,8 @@
 
   // Fetch stats when the component mounts
   fetchGitHubStats();
+  
+  // Set up periodic refresh every 5 minutes
+  const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes in milliseconds
+  setInterval(fetchGitHubStats, REFRESH_INTERVAL);
 </script> 
