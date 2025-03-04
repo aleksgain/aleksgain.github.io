@@ -1,0 +1,17 @@
+---
+interface Props {
+  type: 'Person' | 'WebSite' | 'WebPage' | 'Article';
+  data: Record<string, any>;
+}
+
+const { type, data } = Astro.props;
+
+// Base schema with required context
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': type,
+  ...data
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} /> 

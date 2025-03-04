@@ -1,0 +1,21 @@
+{
+  "name": "Alex Gain - Cloud Engineer",
+  "short_name": "Alex Gain",
+  "description": "Senior Cloud Engineer and DevSecOps Specialist with expertise in AWS, GCP, and Kubernetes",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+} 

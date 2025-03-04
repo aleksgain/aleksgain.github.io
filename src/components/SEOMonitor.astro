@@ -1,0 +1,41 @@
+---
+// This component adds web vitals monitoring for SEO performance
+---
+
+<script is:inline>
+  // Simple Web Vitals monitoring
+  document.addEventListener('DOMContentLoaded', () => {
+    // Only run in production and if the browser supports the Web Vitals API
+    if (window.performance && window.location.hostname !== 'localhost') {
+      // Report Largest Contentful Paint (LCP)
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        console.log('LCP:', lastEntry.startTime / 1000, 'seconds');
+        // Here you could send this data to your analytics
+      }).observe({ type: 'largest-contentful-paint', buffered: true });
+      
+      // Report First Input Delay (FID)
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        entries.forEach(entry => {
+          console.log('FID:', entry.processingStart - entry.startTime, 'ms');
+          // Here you could send this data to your analytics
+        });
+      }).observe({ type: 'first-input', buffered: true });
+      
+      // Report Cumulative Layout Shift (CLS)
+      let clsValue = 0;
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        entries.forEach(entry => {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+            console.log('CLS:', clsValue);
+            // Here you could send this data to your analytics
+          }
+        });
+      }).observe({ type: 'layout-shift', buffered: true });
+    }
+  });
+</script> 

@@ -37,9 +37,18 @@ const markdown = template
 
 // Parse markdown to HTML
 const content = marked(markdown);
+
+// SEO metadata
+const pageTitle = "Alex Gain - Professional Resume";
+const pageDescription = `Senior Cloud Engineer with ${yearsInTech}+ years of experience and ${certCount} cloud certifications. Expertise in AWS, GCP, Kubernetes, and DevSecOps.`;
 ---
 
-<Layout title="Alex Gain - Resume">
+<Layout 
+  title={pageTitle}
+  description={pageDescription}
+  type="profile"
+  canonicalUrl={`${Astro.url.origin}/resume`}
+>
   <div class="print:hidden">
     <ThemeToggle />
   </div>
