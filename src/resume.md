@@ -24,8 +24,15 @@ Experienced Cloud Engineer and DevSecOps Specialist with {{yearsInTech}}+ years 
 
 ## Professional Experience
 
+### HX Expeditions | Technical Architect
+*June 2025 - Present | Prague, Czechia*
+- Lead technical architecture decisions and cloud infrastructure strategy
+- Design and implement scalable cloud solutions for marine cruise management systems
+- Drive technical innovation and best practices across development teams
+- Collaborate with stakeholders to align technical solutions with business objectives
+
 ### Revolgy | Senior Cloud Engineer/Technical Lead
-*March 2019 - Present | Prague, Czechia*
+*March 2019 - May 2025 | Prague, Czechia*
 - Design and implement complex cloud infrastructure patterns using Infrastructure as Code
 - Develop and maintain CI/CD pipelines for automated deployments and testing
 - Implement and optimize Kubernetes clusters for production workloads
