@@ -29,55 +29,90 @@ const pageDescription = `Senior Cloud Engineer and DevSecOps Specialist with ${y
 >
   <ThemeToggle />
   <ScrollToTop />
-  <main class="min-h-screen p-4 sm:p-6 md:p-12 lg:p-24">
-    <div class="max-w-4xl mx-auto animate-fade-in">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-8">
-        <div id="avatar-container" class="flex-shrink-0">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse"></div>
+  
+  <!-- Hero Section -->
+  <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <!-- Animated background gradient -->
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 dark:from-blue-500/5 dark:via-purple-500/5 dark:to-pink-500/5 animate-gradient bg-[length:200%_200%]"></div>
+    
+    <!-- Floating orbs for visual interest -->
+    <div class="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 dark:bg-blue-500/10 rounded-full blur-3xl animate-float"></div>
+    <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/20 dark:bg-purple-500/10 rounded-full blur-3xl animate-float" style="animation-delay: 2s;"></div>
+    
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div class="text-center animate-fade-in">
+        <!-- Avatar -->
+        <div id="avatar-container" class="flex justify-center mb-8">
+          <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse ring-4 ring-white/50 dark:ring-gray-700/50 shadow-2xl"></div>
         </div>
-        <div class="flex-1">
-          <h1 class="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">
-            Hi, I'm Alex
-          </h1>
-          <p class="text-lg sm:text-xl mb-4 text-gray-700 dark:text-gray-300">
-            And I'm good at running stuff in the cloud. Do you have questions about your current or future infra? Let's talk!
+        
+        <!-- Main Heading -->
+        <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 animate-slide-up">
+          Hi, I'm <span class="text-gray-900 dark:text-white">Alex</span>
+        </h1>
+        
+        <!-- Tagline with typing effect -->
+        <div class="mb-8 animate-slide-up" style="animation-delay: 0.2s;">
+          <p class="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-700 dark:text-gray-300 mb-3">
+            Senior Cloud Engineer & DevSecOps Specialist
+          </p>
+          <p class="text-lg sm:text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            I'm good at running stuff in the cloud. Do you have questions about your current or future infra? 
+            <span class="text-blue-600 dark:text-blue-400 font-medium">Let's talk!</span>
           </p>
         </div>
+        
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8 animate-slide-up" style="animation-delay: 0.4s;">
+          <a 
+            href={`mailto:${personalData.email}`}
+            class="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white rounded-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-lg hover:shadow-xl font-semibold"
+          >
+            <span>Get in Touch</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+          </a>
+          <a 
+            href="/resume"
+            class="group inline-flex items-center gap-2 px-6 py-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-lg hover:shadow-xl font-semibold border border-gray-200 dark:border-gray-700"
+          >
+            <span>View Resume</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </a>
+          <a 
+            href={`https://www.linkedin.com/in/${personalData.linkedInUsername}/recent-activity/all/`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group inline-flex items-center gap-2 px-6 py-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-lg hover:shadow-xl font-semibold border border-gray-200 dark:border-gray-700"
+          >
+            <span>LinkedIn</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </a>
+        </div>
+        
+        <!-- Social Bar -->
+        <div class="flex justify-center animate-slide-up" style="animation-delay: 0.6s;">
+          <SocialBar />
+        </div>
       </div>
-      
-      <div class="flex flex-wrap gap-3 sm:gap-4 mb-8">
-        <a 
-          href={`https://www.linkedin.com/in/${personalData.linkedInUsername}/recent-activity/all/`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-md hover:shadow-lg"
-        >
-          <span>View my LinkedIn Activity</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-          </svg>
-        </a>
-        <a 
-          href="/resume"
-          class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-md hover:shadow-lg"
-        >
-          <span>View Resume</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-          </svg>
-        </a>
-        <a 
-          href={`mailto:${personalData.email}`}
-          class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-md hover:shadow-lg"
-        >
-          <span>Get in touch</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-          </svg>
-        </a>
-      </div>
-      
-      <SocialBar />
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <svg class="w-6 h-6 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+      </svg>
+    </div>
+  </section>
+  
+  <!-- Main Content -->
+  <main class="min-h-screen p-4 sm:p-6 md:p-12 lg:p-24">
+    <div class="max-w-4xl mx-auto">
       
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 my-12 sm:my-16 text-center animate-slide-up">
         <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-700 rounded-lg p-4 sm:p-6 transition-all duration-300 hover:shadow-lg hover:scale-105 border border-blue-200 dark:border-gray-600">
@@ -135,7 +170,7 @@ const pageDescription = `Senior Cloud Engineer and DevSecOps Specialist with ${y
             <img 
               src="${avatarUrl}" 
               alt="Alex Gain" 
-              class="w-24 h-24 rounded-full shadow-lg animate-bounce-in"
+              class="w-32 h-32 sm:w-40 sm:h-40 rounded-full shadow-2xl ring-4 ring-white/50 dark:ring-gray-700/50 animate-bounce-in"
             />
           `;
         }

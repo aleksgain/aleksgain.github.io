@@ -7,7 +7,10 @@ export default {
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in',
         'slide-up': 'slideUp 0.5s ease-out',
-        'bounce-in': 'bounceIn 0.5s ease-out'
+        'bounce-in': 'bounceIn 0.5s ease-out',
+        'float': 'float 6s ease-in-out infinite',
+        'gradient': 'gradient 15s ease infinite',
+        'typing': 'typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite'
       },
       keyframes: {
         fadeIn: {
@@ -22,6 +25,22 @@ export default {
           '0%': { transform: 'scale(0.3)', opacity: '0' },
           '50%': { transform: 'scale(1.05)' },
           '100%': { transform: 'scale(1)', opacity: '1' }
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' }
+        },
+        gradient: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' }
+        },
+        typing: {
+          '0%': { width: '0' },
+          '100%': { width: '100%' }
+        },
+        'blink-caret': {
+          '0%, 50%': { borderColor: 'transparent' },
+          '51%, 100%': { borderColor: 'currentColor' }
         }
       }
     },
