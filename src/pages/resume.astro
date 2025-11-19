@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import ScrollToTop from '../components/ScrollToTop.astro';
 import personalData from '../data/personal.json';
 import certifications from '../data/certifications.json';
 import { marked } from 'marked';
@@ -51,15 +52,24 @@ const pageDescription = `Senior Cloud Engineer with ${yearsInTech}+ years of exp
 >
   <div class="print:hidden">
     <ThemeToggle />
+    <ScrollToTop />
   </div>
-  <main class="min-h-screen p-8 md:p-24 print:p-8">
+  <main class="min-h-screen p-4 sm:p-6 md:p-12 lg:p-24 print:p-8">
     <div class="max-w-4xl mx-auto">
       <div id="avatar-container" class="flex justify-center mb-8 print:hidden">
-        <div class="animate-pulse bg-gray-200 dark:bg-gray-700 w-32 h-32 rounded-full"></div>
+        <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse"></div>
       </div>
       <div class="prose dark:prose-invert prose-lg animate-fade-in print:!prose-neutral print:max-w-none" set:html={content} />
       <div class="mt-8 print:hidden">
-        <a href="/" class="text-blue-600 hover:text-blue-800 transition-colors no-underline">← Back to Home</a>
+        <a 
+          href="/" 
+          class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-md hover:shadow-lg no-underline"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          <span>Back to Home</span>
+        </a>
       </div>
     </div>
   </main>

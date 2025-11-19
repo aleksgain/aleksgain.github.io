@@ -1,0 +1,45 @@
+---
+// Scroll to Top Button Component
+---
+
+<button
+  id="scroll-to-top"
+  class="fixed bottom-8 right-8 z-50 p-3 rounded-full bg-blue-600 dark:bg-blue-500 text-white shadow-lg transition-all duration-300 opacity-0 pointer-events-none hover:bg-blue-700 dark:hover:bg-blue-600 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+  aria-label="Scroll to top"
+>
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+  </svg>
+</button>
+
+<script>
+  const scrollToTopBtn = document.getElementById('scroll-to-top');
+  
+  if (scrollToTopBtn) {
+    // Show/hide button based on scroll position
+    const toggleButton = () => {
+      if (window.scrollY > 300) {
+        scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+        scrollToTopBtn.classList.add('opacity-100');
+      } else {
+        scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+        scrollToTopBtn.classList.remove('opacity-100');
+      }
+    };
+
+    // Initial check
+    toggleButton();
+
+    // Listen for scroll events
+    window.addEventListener('scroll', toggleButton, { passive: true });
+
+    // Scroll to top on click
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  }
+</script>
+
