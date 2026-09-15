@@ -6,33 +6,14 @@ import certifications from '../data/certifications.json';
 const badges = certifications.badges;
 const yearsInTech = new Date().getFullYear() - personal.graduationYear + 1;
 
-// GitHub contributions, fetched at build time with the same query as
-// src/pages/api/github-stats.json.ts. Requires GITHUB_TOKEN at build time;
-// without it the stat falls back to an em dash rather than failing the build.
-let commits: number | null = null;
-try {
-  const res = await fetch('https://api.github.com/graphql', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `query($userName:String!){user(login:$userName){contributionsCollection{totalCommitContributions}}}`,
-      variables: { userName: personal.githubUsername },
-    }),
-  });
-  const json = await res.json();
-  commits = json?.data?.user?.contributionsCollection?.totalCommitContributions ?? null;
-} catch {
-  commits = null;
-}
-
+// The commit count is filled in client-side from /api/github-stats.json
+// (see the script below) so the panel never bakes a stale number into the
+// page. It renders as an em dash until the fetch resolves.
 const stats = [
   { value: `${yearsInTech}+`, label: 'YEARS IN TECH', color: 'var(--link)' },
   { value: String(badges.length), label: 'CERTIFICATIONS', color: 'var(--green)' },
   { value: String(personal.cloudPlatforms), label: 'CLOUD PLATFORMS', color: 'var(--accent)' },
-  { value: commits ? commits.toLocaleString('en-US') : '—', label: 'COMMITS / YEAR', color: 'var(--orange)' },
+  { value: '—', label: 'COMMITS / YEAR', color: 'var(--orange)', id: 'github-commits' },
 ];
 
 const socials = [
@@ -70,7 +51,7 @@ const VISIBLE_BADGES = 6;
     </div>
     {stats.map((s) => (
       <div class="stat">
-        <div class="stat__value" style={`color:${s.color}`}>{s.value}</div>
+        <div class="stat__value" style={`color:${s.color}`} id={s.id} data-pending={s.id ? 'true' : undefined}>{s.value}</div>
         <div class="stat__label mono">{s.label}</div>
       </div>
     ))}
@@ -126,6 +107,7 @@ const VISIBLE_BADGES = 6;
   <style>
     [data-extra] { display: block !important; }
     [data-certs-toggle] { display: none; }
+    [data-pending] { opacity: 1 !important; animation: none !important; }
   </style>
 </noscript>
 
@@ -140,6 +122,36 @@ const VISIBLE_BADGES = 6;
     btn.setAttribute('aria-expanded', String(open));
     btn.textContent = open ? 'Hide all' : 'See all ' + document.querySelectorAll('.certs__badge').length;
   });
+
+  // Commit count, fetched client-side so the number is never baked into the page.
+  (function () {
+    var el = document.getElementById('github-commits');
+    if (!el) return;
+
+    function settle(text) {
+      el.textContent = text;
+      el.removeAttribute('data-pending');
+    }
+
+    fetch('/api/github-stats.json?' + Date.now(), {
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('github-stats ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        var commits = data && data.data && data.data.user
+          && data.data.user.contributionsCollection
+          && data.data.user.contributionsCollection.totalCommitContributions;
+        settle(typeof commits === 'number' ? commits.toLocaleString('en-US') : '—');
+      })
+      .catch(function () { settle('—'); });
+  })();
 </script>
 
 <style>
@@ -164,6 +176,13 @@ const VISIBLE_BADGES = 6;
   .stat--hero .stat__value { font-size: 30px; }
   .stat__label { margin-top: 5px; font: 400 10.5px/1.2 "JetBrains Mono", monospace; color: var(--ink3); letter-spacing: .04em; }
   .stat--hero .stat__label { margin-top: 0; color: var(--ink2); line-height: 1.4; }
+
+  /* Gentle pulse while the commit count is in flight. */
+  .stat__value[data-pending] { opacity: .45; animation: statPulse 1.4s ease-in-out infinite; }
+  @keyframes statPulse { 0%, 100% { opacity: .45; } 50% { opacity: .8; } }
+  @media (prefers-reduced-motion: reduce) {
+    .stat__value[data-pending] { animation: none; }
+  }
 
   .certs { display: flex; flex-direction: column; gap: 11px; }
   .certs__head { display: flex; align-items: baseline; gap: 8px; }
