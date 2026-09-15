@@ -122,6 +122,11 @@ const websiteSchema = {
     <style is:global>
       html, body { margin: 0; padding: 0; }
 
+      /* The `hidden` attribute is only a user-agent rule, so any author rule
+         that sets `display` (flex/block/grid) silently defeats it. Enforce it
+         once, globally, for every element this site hides via the attribute. */
+      [hidden] { display: none !important; }
+
       html {
         --bg:#0b1221; --bg2:#111a2e; --card:#1b2437; --card2:#222d44;
         --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
