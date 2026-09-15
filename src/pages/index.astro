@@ -1,5 +1,5 @@
 ---
-// src/pages/index.astro — the unified main page: identity + The Wire in one view.
+// src/pages/index.astro — the unified main page: identity + News in one view.
 // Replaces the old split between / (feed) and /about (stats, certs, resume links).
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
@@ -28,9 +28,9 @@ const posts = await Promise.all(
     })
 );
 
-const pageTitle = 'Alex Gain — The Wire';
+const pageTitle = 'Alex Gain — News';
 const pageDescription =
-  'Dev, Sec, Ops, Infra, Cloud and AI links worth your time, picked daily by Alex Gain, Senior Cloud Engineer & DevSecOps Specialist.';
+  'Dev, Sec, Ops, Infra, Cloud and AI news worth checking, curated by Alex Gain, Senior Cloud Engineer & DevSecOps Specialist.';
 ---
 <Base title={pageTitle} description={pageDescription} type="website">
   <TopBar />

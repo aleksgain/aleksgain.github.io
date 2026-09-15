@@ -33,7 +33,7 @@ const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short
 ---
 
 <Base
-  title={`${post.data.title} — The Wire`}
+  title={`${post.data.title} — News`}
   description={post.data.title}
   type="article"
   canonicalUrl={`${Astro.url.origin}/blog/${post.slug}/`}
@@ -42,7 +42,7 @@ const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short
   <ScrollToTop />
 
   <div class="shell--narrow">
-    <a href="/" class="back mono">← The Wire</a>
+    <a href="/" class="back mono">← Back</a>
 
     <article
       class="entry"
