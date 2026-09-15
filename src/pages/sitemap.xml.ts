@@ -9,19 +9,19 @@ const pages = [
   {
     url: '/',
     lastmod: today,
-    changefreq: 'monthly',
+    changefreq: 'daily',
     priority: 1.0
   },
   {
-    url: '/resume',
+    url: '/about',
     lastmod: today,
     changefreq: 'monthly',
     priority: 0.8
   },
   {
-    url: '/blog',
+    url: '/resume',
     lastmod: today,
-    changefreq: 'daily',
+    changefreq: 'monthly',
     priority: 0.8
   }
 ];
