@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import SocialBar from '../components/SocialBar.astro';
 import CredlyBadges from '../components/CredlyBadges.astro';
@@ -8,6 +9,7 @@ import ScrollToTop from '../components/ScrollToTop.astro';
 import certifications from '../data/certifications.json';
 import skillsData from '../data/skills.json';
 import personalData from '../data/personal.json';
+import { categoryStyles } from '../data/blogCategories';
 
 // Calculate career metrics
 const careerStartYear = personalData.graduationYear - 1;
@@ -16,6 +18,12 @@ const yearsInTech = currentYear - careerStartYear;
 
 // Get the number of certifications
 const certCount = certifications.badges.length;
+
+// Latest blog posts
+const latestPosts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' });
 
 // SEO metadata
 const pageTitle = "Alex Gain - Senior Cloud Engineer & DevSecOps Specialist";
@@ -82,7 +90,7 @@ const pageDescription = `Senior Cloud Engineer and DevSecOps Specialist with ${y
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
           </a>
-          <a 
+          <a
             href={`https://www.linkedin.com/in/${personalData.linkedInUsername}/recent-activity/all/`}
             target="_blank"
             rel="noopener noreferrer"
@@ -91,6 +99,15 @@ const pageDescription = `Senior Cloud Engineer and DevSecOps Specialist with ${y
             <span>LinkedIn Activity</span>
             <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 24 24">
               <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </a>
+          <a
+            href="/blog"
+            class="group inline-flex items-center gap-2 px-6 py-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-lg hover:shadow-xl font-semibold border border-gray-200 dark:border-gray-700"
+          >
+            <span>The Wire</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 12h6v4"></path>
             </svg>
           </a>
         </div>
@@ -146,13 +163,44 @@ const pageDescription = `Senior Cloud Engineer and DevSecOps Specialist with ${y
       </div>
 
       <div class="flex flex-wrap gap-2 sm:gap-3 mt-12 sm:mt-16 animate-slide-up">
-        {skillsData.skills.flatMap(category => 
+        {skillsData.skills.flatMap(category =>
           category.items.map(skill => (
           <span class="px-3 py-1.5 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 hover:scale-110 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
             {skill}
           </span>
         )))}
       </div>
+
+      {latestPosts.length > 0 && (
+        <section class="mt-16 sm:mt-20">
+          <div class="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 class="text-2xl font-semibold">Latest from the Wire</h2>
+            <a href="/blog" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline whitespace-nowrap">
+              View all &rarr;
+            </a>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+            {latestPosts.map(post => (
+              <a
+                href={`/blog/${post.slug}/`}
+                class="group block bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
+              >
+                <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+                  <span class={`px-2 py-0.5 rounded-full font-semibold uppercase tracking-wide ${categoryStyles[post.data.category]}`}>
+                    {post.data.category}
+                  </span>
+                  <time class="text-gray-500 dark:text-gray-400" datetime={post.data.pubDate.toISOString()}>
+                    {dateFmt.format(post.data.pubDate)}
+                  </time>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  {post.data.title}
+                </h3>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   </main>
 </Layout>
