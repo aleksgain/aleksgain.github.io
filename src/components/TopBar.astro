@@ -1,0 +1,22 @@
+---
+// src/components/TopBar.astro — the shared sticky header.
+interface Props {
+  /** Render the brand as a link back to the feed (used on subpages). */
+  home?: boolean;
+}
+const { home = false } = Astro.props;
+---
+<header class="topbar">
+  <div class="topbar__brand">
+    {home
+      ? <a href="/" class="topbar__name">The Wire</a>
+      : <span class="topbar__name">The Wire</span>}
+    <span class="topbar__host">ALEXKRI.NET</span>
+  </div>
+  <div class="topbar__spacer"></div>
+  <div class="topbar__actions">
+    <a href="/resume" class="topbar__link">Resume</a>
+    <a href="mailto:alex@alexkri.net" class="topbar__link">Contact</a>
+    <button type="button" class="topbar__theme" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">☀</button>
+  </div>
+</header>

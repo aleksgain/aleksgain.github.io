@@ -1,0 +1,202 @@
+---
+// src/components/WireFeed.astro — the full-text feed with category filters + infinite scroll
+import type { CollectionEntry } from 'astro:content';
+
+type Post = {
+  slug: string;
+  title: string;
+  category: CollectionEntry<'blog'>['data']['category'];
+  source: string;
+  sourceUrl: string;
+  pubDate: Date;
+  tags: string[];
+  /** Rendered markdown body — entries are short link-commentary, so it renders in full. */
+  Content: any;
+};
+
+interface Props { posts: Post[]; pageSize?: number; }
+const { posts, pageSize = 8 } = Astro.props;
+
+const categories = ['All', 'Dev', 'Sec', 'Ops', 'Infra', 'Cloud', 'AI'] as const;
+
+// Pill colours mirror src/data/blogCategories.ts, resolved to CSS custom properties
+// so both themes work without Tailwind's dark: variants.
+const pill: Record<string, { dark: [string, string]; light: [string, string] }> = {
+  Dev:   { dark: ['#3b1d6e', '#e9d5ff'], light: ['#f3e8ff', '#6b21a8'] },
+  Sec:   { dark: ['#6e1d24', '#fecaca'], light: ['#fee2e2', '#991b1b'] },
+  Ops:   { dark: ['#6b4410', '#fde68a'], light: ['#fef3c7', '#92400e'] },
+  Infra: { dark: ['#0f4d47', '#99f6e4'], light: ['#ccfbf1', '#115e59'] },
+  Cloud: { dark: ['#17355f', '#bfdbfe'], light: ['#dbeafe', '#1e40af'] },
+  AI:    { dark: ['#5f1c44', '#fbcfe8'], light: ['#fce7f3', '#9d174d'] },
+};
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+<main class="feed">
+  <div class="feed__head">
+    <h1>The Wire</h1>
+    <p>Dev, Sec, Ops, Infra, Cloud and AI links worth your time, picked daily.</p>
+  </div>
+
+  <div class="feed__filters" role="group" aria-label="Filter by category">
+    {categories.map((c) => (
+      <button type="button" data-filter={c} class:list={['chip', { 'chip--on': c === 'All' }]}>{c}</button>
+    ))}
+  </div>
+
+  {posts.length === 0 && <p class="feed__empty">No posts yet — check back soon.</p>}
+
+  <div class="feed__list" data-feed>
+    {posts.map((p, i) => {
+      const Body = p.Content;
+      return (
+        <article
+          class="post"
+          data-category={p.category}
+          data-index={i}
+          hidden={i >= pageSize}
+          style={`--pill-bg-dark:${pill[p.category].dark[0]};--pill-fg-dark:${pill[p.category].dark[1]};--pill-bg-light:${pill[p.category].light[0]};--pill-fg-light:${pill[p.category].light[1]}`}
+        >
+          <div class="post__meta">
+            <span class="post__pill mono">{p.category.toUpperCase()}</span>
+            <span class="post__source">{p.source}</span>
+            <span class="post__dot">·</span>
+            <time class="post__date mono" datetime={p.pubDate.toISOString()}>{fmt(p.pubDate)}</time>
+            <span class="post__spacer"></span>
+            <a class="post__out mono" href={`/blog/${p.slug}/`} title="Permalink">#</a>
+            <a class="post__out mono" href={p.sourceUrl} target="_blank" rel="noopener">source ↗</a>
+          </div>
+          <h2 class="post__title"><a href={`/blog/${p.slug}/`}>{p.title}</a></h2>
+          <div class="post__body"><Body /></div>
+          {p.tags.length > 0 && (
+            <div class="post__tags">
+              {p.tags.map((t) => <span class="mono">#{t}</span>)}
+            </div>
+          )}
+        </article>
+      );
+    })}
+  </div>
+
+  <div class="feed__foot mono" data-sentinel>
+    {posts.length > pageSize ? 'scroll for more' : "You're all caught up."}
+  </div>
+</main>
+
+<noscript>
+  <style>.post[hidden] { display: block !important; } .feed__filters { display: none; }</style>
+</noscript>
+
+<script is:inline define:vars={{ pageSize }}>
+  const feed = document.querySelector('[data-feed]');
+  const foot = document.querySelector('[data-sentinel]');
+  if (feed && foot) {
+    const all = Array.from(feed.querySelectorAll('.post'));
+    let filter = 'All';
+    let shown = pageSize;
+
+    function matching() {
+      return filter === 'All' ? all : all.filter((el) => el.dataset.category === filter);
+    }
+
+    function render() {
+      const list = matching();
+      all.forEach((el) => { el.hidden = true; });
+      list.slice(0, shown).forEach((el) => { el.hidden = false; });
+      foot.textContent = list.length === 0
+        ? 'Nothing in this category yet.'
+        : (shown >= list.length ? "You're all caught up." : 'scroll for more');
+    }
+
+    document.querySelectorAll('[data-filter]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filter = btn.dataset.filter;
+        shown = pageSize;
+        document.querySelectorAll('[data-filter]').forEach((b) => b.classList.toggle('chip--on', b === btn));
+        render();
+      });
+    });
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        if (shown >= matching().length) return;
+        shown += pageSize;
+        render();
+      }, { rootMargin: '400px' }).observe(foot);
+    }
+
+    render();
+  }
+</script>
+
+<style>
+  .feed { min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+  .feed__head h1 { margin: 0; font: 900 34px/1.05 Lato, sans-serif; letter-spacing: -1px; color: var(--ink); }
+  .feed__head p { margin: 7px 0 0; font-size: 14.5px; color: var(--ink2); }
+  .feed__empty { margin: 0; padding: 60px 0; text-align: center; color: var(--ink3); }
+
+  .feed__filters {
+    display: flex; gap: 7px; flex-wrap: wrap;
+    position: sticky; top: 60px; z-index: 20; padding: 10px 0;
+    background: color-mix(in oklab, var(--bg) 90%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  .chip {
+    cursor: pointer; font: 700 12px Lato, sans-serif; padding: 6px 12px;
+    border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink2); transition: all .12s ease;
+  }
+  .chip:hover { color: var(--ink); }
+  .chip--on { background: var(--ink); color: var(--bg); border-color: transparent; }
+
+  .feed__list { display: flex; flex-direction: column; gap: 12px; }
+  .post {
+    padding: 18px 20px; border-radius: 14px; background: var(--card);
+    border: 1px solid var(--line); animation: wireIn .28s ease both;
+    transition: border-color .16s ease, transform .16s ease, box-shadow .16s ease;
+  }
+  .post:hover { transform: translateY(-2px); border-color: var(--line2); box-shadow: var(--shadow); }
+  .post__meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .post__spacer { flex: 1; }
+  .post__pill {
+    font: 700 10.5px/1 "JetBrains Mono", monospace; letter-spacing: .09em;
+    padding: 5px 8px; border-radius: 6px;
+    background: var(--pill-bg-dark); color: var(--pill-fg-dark);
+  }
+  :global(html[data-theme="light"]) .post__pill { background: var(--pill-bg-light); color: var(--pill-fg-light); }
+  .post__source { font-weight: 700; font-size: 13.5px; color: var(--ink2); }
+  .post__dot { color: var(--ink3); font-size: 12px; }
+  .post__date { font: 400 12px "JetBrains Mono", monospace; color: var(--ink3); }
+  .post__out { font: 400 11px "JetBrains Mono", monospace; color: var(--ink3); }
+  .post__out:hover { color: var(--accent); }
+  .post__title { margin: 11px 0 0; font: 700 19px/1.3 Lato, sans-serif; letter-spacing: -.3px; text-wrap: pretty; }
+  .post__title a { color: var(--ink); }
+  .post__title a:hover { color: var(--accent); }
+
+  .post__body { margin: 8px 0 0; font-size: 14.5px; line-height: 1.6; color: var(--ink2); text-wrap: pretty; }
+  .post__body :global(p) { margin: 0 0 10px; }
+  .post__body :global(p:last-child) { margin-bottom: 0; }
+  .post__body :global(ul), .post__body :global(ol) { margin: 0 0 10px; padding-left: 20px; }
+  .post__body :global(li) { margin: 3px 0; }
+  .post__body :global(code) {
+    font: 400 12.5px "JetBrains Mono", monospace;
+    background: var(--card2); border: 1px solid var(--line);
+    border-radius: 5px; padding: 1px 5px; color: var(--ink);
+  }
+  .post__body :global(pre) {
+    background: var(--card2); border: 1px solid var(--line);
+    border-radius: 9px; padding: 12px 14px; overflow-x: auto;
+  }
+  .post__body :global(pre code) { background: none; border: 0; padding: 0; }
+  .post__body :global(strong) { color: var(--ink); font-weight: 700; }
+  .post__body :global(blockquote) {
+    margin: 0 0 10px; padding-left: 12px;
+    border-left: 3px solid var(--line2); color: var(--ink3);
+  }
+
+  .post__tags { margin-top: 12px; display: flex; gap: 9px; flex-wrap: wrap; font: 400 12px "JetBrains Mono", monospace; color: var(--ink3); }
+
+  .feed__foot { padding: 26px 0; text-align: center; font: 400 12px "JetBrains Mono", monospace; color: var(--ink3); }
+</style>

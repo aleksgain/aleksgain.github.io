@@ -1,13 +1,12 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import ThemeToggle from '../../components/ThemeToggle.astro';
+import Base from '../../layouts/Base.astro';
+import TopBar from '../../components/TopBar.astro';
 import ScrollToTop from '../../components/ScrollToTop.astro';
-import { categoryStyles } from '../../data/blogCategories';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map(post => ({
+  return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }));
@@ -20,61 +19,112 @@ interface Props {
 const { post } = Astro.props;
 const { Content } = await post.render();
 
+const pill: Record<string, { dark: [string, string]; light: [string, string] }> = {
+  Dev:   { dark: ['#3b1d6e', '#e9d5ff'], light: ['#f3e8ff', '#6b21a8'] },
+  Sec:   { dark: ['#6e1d24', '#fecaca'], light: ['#fee2e2', '#991b1b'] },
+  Ops:   { dark: ['#6b4410', '#fde68a'], light: ['#fef3c7', '#92400e'] },
+  Infra: { dark: ['#0f4d47', '#99f6e4'], light: ['#ccfbf1', '#115e59'] },
+  Cloud: { dark: ['#17355f', '#bfdbfe'], light: ['#dbeafe', '#1e40af'] },
+  AI:    { dark: ['#5f1c44', '#fbcfe8'], light: ['#fce7f3', '#9d174d'] },
+};
+const c = pill[post.data.category];
+
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 
-<Layout
-  title={`${post.data.title} - The Wire`}
+<Base
+  title={`${post.data.title} — The Wire`}
   description={post.data.title}
+  type="article"
   canonicalUrl={`${Astro.url.origin}/blog/${post.slug}/`}
 >
-  <ThemeToggle />
+  <TopBar home />
   <ScrollToTop />
 
-  <main class="min-h-screen p-4 sm:p-6 md:p-12 lg:p-24">
-    <article class="max-w-3xl mx-auto">
-      <a href="/" class="inline-flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 mb-8 transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-        The Wire
-      </a>
+  <div class="shell--narrow">
+    <a href="/" class="back mono">← The Wire</a>
 
-      <div class="flex flex-wrap items-center gap-2 mb-3 text-xs">
-        <span class={`px-2.5 py-1 rounded-full font-semibold uppercase tracking-wide ${categoryStyles[post.data.category]}`}>
-          {post.data.category}
-        </span>
-        <span class="text-gray-500 dark:text-gray-400">{post.data.source}</span>
-        <span class="text-gray-400 dark:text-gray-500">·</span>
-        <time class="text-gray-500 dark:text-gray-400" datetime={post.data.pubDate.toISOString()}>
+    <article
+      class="entry"
+      style={`--pill-bg-dark:${c.dark[0]};--pill-fg-dark:${c.dark[1]};--pill-bg-light:${c.light[0]};--pill-fg-light:${c.light[1]}`}
+    >
+      <div class="entry__meta">
+        <span class="entry__pill mono">{post.data.category.toUpperCase()}</span>
+        <span class="entry__source">{post.data.source}</span>
+        <span class="entry__dot">·</span>
+        <time class="entry__date mono" datetime={post.data.pubDate.toISOString()}>
           {dateFmt.format(post.data.pubDate)}
         </time>
       </div>
 
-      <h1 class="text-3xl sm:text-4xl font-bold mb-6 text-gray-900 dark:text-white text-balance">
-        {post.data.title}
-      </h1>
+      <h1 class="entry__title">{post.data.title}</h1>
 
-      <div class="prose dark:prose-invert prose-lg max-w-none">
-        <Content />
-      </div>
+      <div class="entry__body"><Content /></div>
 
-      <div class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex flex-wrap gap-2">
-          {post.data.tags.map(tag => (
-            <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
-              #{tag}
-            </span>
-          ))}
+      <div class="entry__foot">
+        <div class="entry__tags">
+          {post.data.tags.map((tag) => <span class="mono">#{tag}</span>)}
         </div>
         <a
           href={post.data.sourceUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline"
-        >
-          Read the source
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-        </a>
+          class="entry__out"
+        >Read the source ↗</a>
       </div>
     </article>
-  </main>
-</Layout>
+  </div>
+</Base>
+
+<style>
+  .back { display: inline-block; margin-bottom: 26px; font: 400 12px "JetBrains Mono", monospace; color: var(--ink3); }
+  .back:hover { color: var(--accent); }
+
+  .entry__meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .entry__pill {
+    font: 700 10.5px/1 "JetBrains Mono", monospace; letter-spacing: .09em;
+    padding: 5px 8px; border-radius: 6px;
+    background: var(--pill-bg-dark); color: var(--pill-fg-dark);
+  }
+  :global(html[data-theme="light"]) .entry__pill { background: var(--pill-bg-light); color: var(--pill-fg-light); }
+  .entry__source { font-weight: 700; font-size: 13.5px; color: var(--ink2); }
+  .entry__dot { color: var(--ink3); font-size: 12px; }
+  .entry__date { font: 400 12px "JetBrains Mono", monospace; color: var(--ink3); }
+
+  .entry__title {
+    margin: 16px 0 0; font: 900 34px/1.15 Lato, sans-serif;
+    letter-spacing: -1px; color: var(--ink); text-wrap: balance;
+  }
+
+  .entry__body { margin-top: 18px; font-size: 16.5px; line-height: 1.7; color: var(--ink2); text-wrap: pretty; }
+  .entry__body :global(p) { margin: 0 0 16px; }
+  .entry__body :global(h2) { margin: 30px 0 10px; font: 700 22px Lato, sans-serif; color: var(--ink); }
+  .entry__body :global(h3) { margin: 24px 0 8px; font: 700 18px Lato, sans-serif; color: var(--ink); }
+  .entry__body :global(ul), .entry__body :global(ol) { margin: 0 0 16px; padding-left: 22px; }
+  .entry__body :global(li) { margin: 5px 0; }
+  .entry__body :global(li::marker) { color: var(--ink3); }
+  .entry__body :global(strong) { color: var(--ink); font-weight: 700; }
+  .entry__body :global(code) {
+    font: 400 14px "JetBrains Mono", monospace;
+    background: var(--card2); border: 1px solid var(--line);
+    border-radius: 5px; padding: 1px 5px; color: var(--ink);
+  }
+  .entry__body :global(pre) {
+    background: var(--card2); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px 16px; overflow-x: auto; margin: 0 0 16px;
+  }
+  .entry__body :global(pre code) { background: none; border: 0; padding: 0; font-size: 13px; }
+  .entry__body :global(blockquote) {
+    margin: 0 0 16px; padding-left: 14px;
+    border-left: 3px solid var(--line2); color: var(--ink3);
+  }
+  .entry__body :global(img) { max-width: 100%; height: auto; border-radius: 10px; }
+
+  .entry__foot {
+    margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .entry__tags { display: flex; gap: 9px; flex-wrap: wrap; font: 400 12px "JetBrains Mono", monospace; color: var(--ink3); }
+  .entry__out { font: 900 14px Lato, sans-serif; color: var(--link); }
+  .entry__out:hover { color: var(--accent); }
+</style>

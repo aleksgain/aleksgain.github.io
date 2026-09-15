@@ -1,0 +1,203 @@
+---
+// src/components/IdentityPanel.astro — the left column: identity, stats, certs, resume, links
+import personal from '../data/personal.json';
+import certifications from '../data/certifications.json';
+
+const badges = certifications.badges;
+const yearsInTech = new Date().getFullYear() - personal.graduationYear + 1;
+
+// GitHub contributions, fetched at build time with the same query as
+// src/pages/api/github-stats.json.ts. Requires GITHUB_TOKEN at build time;
+// without it the stat falls back to an em dash rather than failing the build.
+let commits: number | null = null;
+try {
+  const res = await fetch('https://api.github.com/graphql', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `query($userName:String!){user(login:$userName){contributionsCollection{totalCommitContributions}}}`,
+      variables: { userName: personal.githubUsername },
+    }),
+  });
+  const json = await res.json();
+  commits = json?.data?.user?.contributionsCollection?.totalCommitContributions ?? null;
+} catch {
+  commits = null;
+}
+
+const stats = [
+  { value: `${yearsInTech}+`, label: 'YEARS IN TECH', color: 'var(--link)' },
+  { value: String(badges.length), label: 'CERTIFICATIONS', color: 'var(--green)' },
+  { value: String(personal.cloudPlatforms), label: 'CLOUD PLATFORMS', color: 'var(--accent)' },
+  { value: commits ? commits.toLocaleString('en-US') : '—', label: 'COMMITS / YEAR', color: 'var(--orange)' },
+];
+
+const socials = [
+  { name: 'LinkedIn', href: `https://www.linkedin.com/in/${personal.linkedInUsername}`, icon: '/icons/linkedin.svg' },
+  { name: 'GitHub', href: `https://github.com/${personal.githubUsername}`, icon: '/icons/github.svg' },
+  { name: 'Credly', href: `https://www.credly.com/users/${personal.credlyUsername}`, icon: '/icons/credly.svg' },
+];
+
+const VISIBLE_BADGES = 6;
+---
+<aside class="panel">
+  <div class="panel__id">
+    <img
+      src={`https://github.com/${personal.githubUsername}.png`}
+      alt="Alex Gain"
+      width="60"
+      height="60"
+      class="panel__avatar"
+    />
+    <div>
+      <div class="panel__name">Alex Gain</div>
+      <div class="panel__role">Cloud Engineer &amp; DevSecOps</div>
+    </div>
+  </div>
+
+  <p class="panel__bio">
+    I'm good at running stuff in the cloud. Questions about your current or future infra?
+    <a href={`mailto:${personal.email}`}>Let's talk.</a>
+  </p>
+
+  <div class="panel__stats">
+    <div class="stat stat--hero">
+      <div class="stat__value" style="color:var(--orange)">∞</div>
+      <div class="stat__label mono">PROBLEMS SOLVED</div>
+    </div>
+    {stats.map((s) => (
+      <div class="stat">
+        <div class="stat__value" style={`color:${s.color}`}>{s.value}</div>
+        <div class="stat__label mono">{s.label}</div>
+      </div>
+    ))}
+  </div>
+
+  <div class="panel__rule"></div>
+
+  <div class="certs">
+    <div class="certs__head">
+      <span class="certs__title mono">CERTIFICATIONS</span>
+      <span class="certs__count">{badges.length}</span>
+      <span class="certs__spacer"></span>
+      <button type="button" class="certs__more" data-certs-toggle aria-expanded="false">See all {badges.length}</button>
+    </div>
+    <div class="certs__grid" data-certs-grid>
+      {badges.map((b, i) => (
+        <a
+          href={b.url}
+          target="_blank"
+          rel="noopener"
+          title={b.name}
+          class="certs__badge"
+          data-extra={i >= VISIBLE_BADGES ? 'true' : undefined}
+          hidden={i >= VISIBLE_BADGES}
+        >
+          <img src={b.image_url} alt={b.name} loading="lazy" />
+        </a>
+      ))}
+    </div>
+    <div class="certs__list" data-certs-list hidden>
+      {badges.map((b) => (
+        <a href={b.url} target="_blank" rel="noopener">{b.name}</a>
+      ))}
+    </div>
+  </div>
+
+  <div class="panel__rule"></div>
+
+  <a href="/resume" class="resume__primary">View resume</a>
+
+  <div class="socials">
+    {socials.map((s) => (
+      <a href={s.href} target="_blank" rel="noopener" class="socials__link">
+        <img src={s.icon} alt="" width="14" height="14" />{s.name}
+      </a>
+    ))}
+  </div>
+
+  <div class="panel__meta mono">Prague, Czechia · {personal.email}</div>
+</aside>
+
+<noscript>
+  <style>
+    [data-extra] { display: block !important; }
+    [data-certs-toggle] { display: none; }
+  </style>
+</noscript>
+
+<script is:inline>
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-certs-toggle]');
+    if (!btn) return;
+    var list = document.querySelector('[data-certs-list]');
+    var open = list.hidden;
+    list.hidden = !open;
+    document.querySelectorAll('[data-extra]').forEach(function (el) { el.hidden = !open; });
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = open ? 'Hide all' : 'See all ' + document.querySelectorAll('.certs__badge').length;
+  });
+</script>
+
+<style>
+  .panel { position: sticky; top: 82px; display: flex; flex-direction: column; gap: 18px; }
+  .panel__id { display: flex; align-items: center; gap: 14px; }
+  .panel__avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--line2); background: var(--card2); }
+  .panel__name { font-weight: 900; font-size: 21px; letter-spacing: -.4px; line-height: 1.1; color: var(--ink); }
+  .panel__role { margin-top: 3px; font-size: 13px; color: var(--ink2); line-height: 1.3; }
+  .panel__bio { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink2); text-wrap: pretty; }
+  .panel__rule { height: 1px; background: var(--line); }
+  .panel__meta { font: 400 11px/1.5 "JetBrains Mono", monospace; color: var(--ink3); word-break: break-word; }
+
+  .panel__stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat { padding: 11px 12px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+  .stat--hero {
+    grid-column: 1 / -1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 7px;
+    padding: 16px; background: var(--card2); border: 1px solid var(--line2);
+    border-radius: 12px; text-align: center;
+  }
+  .stat__value { font: 900 20px/1 Lato, sans-serif; }
+  .stat--hero .stat__value { font-size: 30px; }
+  .stat__label { margin-top: 5px; font: 400 10.5px/1.2 "JetBrains Mono", monospace; color: var(--ink3); letter-spacing: .04em; }
+  .stat--hero .stat__label { margin-top: 0; color: var(--ink2); line-height: 1.4; }
+
+  .certs { display: flex; flex-direction: column; gap: 11px; }
+  .certs__head { display: flex; align-items: baseline; gap: 8px; }
+  .certs__spacer { flex: 1; }
+  .certs__title { font: 400 10.5px/1 "JetBrains Mono", monospace; color: var(--ink3); letter-spacing: .09em; }
+  .certs__count { font-size: 11px; color: var(--ink3); }
+  .certs__more { cursor: pointer; border: 0; background: none; padding: 0; font: 700 11.5px Lato, sans-serif; color: var(--link); }
+  .certs__more:hover { color: var(--accent); }
+  .certs__grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .certs__badge {
+    display: block; width: 38px; height: 38px; border-radius: 9px;
+    background: var(--card2); border: 1px solid var(--line); padding: 3px;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+  .certs__badge:hover { transform: translateY(-2px) scale(1.06); border-color: var(--accent); }
+  .certs__badge img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .certs__list { display: flex; flex-direction: column; gap: 5px; padding-top: 2px; }
+  .certs__list a { font-size: 12.5px; line-height: 1.35; color: var(--ink2); }
+  .certs__list a:hover { color: var(--accent); }
+
+  .resume__primary {
+    display: flex; align-items: center; justify-content: center;
+    padding: 13px 16px; border-radius: 9px;
+    background: var(--accent); border: 1px solid var(--accent);
+    font: 900 14px Lato, sans-serif; letter-spacing: -.2px; color: #0b1221;
+  }
+  .resume__primary:hover { filter: brightness(1.08); color: #0b1221; }
+
+  .socials { display: flex; gap: 7px; }
+  .socials__link {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 8px 0; border-radius: 8px; background: var(--card);
+    border: 1px solid var(--line); font: 700 12px Lato, sans-serif; color: var(--ink2);
+  }
+  .socials__link:hover { color: var(--ink); border-color: var(--line2); }
+  .socials__link img { width: 14px; height: 14px; display: block; opacity: .9; }
+</style>

@@ -13,12 +13,6 @@ const pages = [
     priority: 1.0
   },
   {
-    url: '/about',
-    lastmod: today,
-    changefreq: 'monthly',
-    priority: 0.8
-  },
-  {
     url: '/resume',
     lastmod: today,
     changefreq: 'monthly',
