@@ -5,12 +5,11 @@ import ScrollToTop from '../components/ScrollToTop.astro';
 import personalData from '../data/personal.json';
 import certifications from '../data/certifications.json';
 import { marked } from 'marked';
+import { yearsInTech as calcYears } from '../data/career';
 import fs from 'node:fs';
 
 // Calculate career metrics
-const careerStartYear = personalData.graduationYear - 1;
-const currentYear = new Date().getFullYear();
-const yearsInTech = currentYear - careerStartYear;
+const yearsInTech = calcYears();
 const certCount = certifications.badges.length;
 
 // Format phone number for tel: link
@@ -41,7 +40,7 @@ const content = marked(markdown);
 
 // SEO metadata
 const pageTitle = 'Alex Gain - Professional Resume';
-const pageDescription = `Senior Cloud Engineer with ${yearsInTech}+ years of experience and ${certCount} cloud certifications. Expertise in AWS, GCP, Kubernetes, and DevSecOps.`;
+const pageDescription = `Senior Cloud Engineer with ${yearsInTech}+ years of experience and ${certCount} cloud certifications. Expertise in AWS, Azure, Google Cloud, Kubernetes, FinOps and cloud security.`;
 ---
 
 <Base
@@ -54,6 +53,13 @@ const pageDescription = `Senior Cloud Engineer with ${yearsInTech}+ years of exp
   <div class="no-print"><ScrollToTop /></div>
 
   <div class="shell--narrow">
+    <div class="resume-tools no-print">
+      <button type="button" class="resume-tools__print" data-print aria-label="Print or save as PDF">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="6" y="14" width="12" height="7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/></svg>
+        Print / PDF
+      </button>
+    </div>
+
     <div class="resume-head no-print">
       <img
         src={`https://github.com/${personalData.githubUsername}.png`}
@@ -72,6 +78,12 @@ const pageDescription = `Senior Cloud Engineer with ${yearsInTech}+ years of exp
     </div>
   </div>
 </Base>
+
+<script is:inline>
+  document.querySelectorAll('[data-print]').forEach(function (b) {
+    b.addEventListener('click', function () { window.print(); });
+  });
+</script>
 
 <style>
   .resume-head { display: flex; justify-content: center; margin-bottom: 28px; }
@@ -99,6 +111,8 @@ const pageDescription = `Senior Cloud Engineer with ${yearsInTech}+ years of exp
   .doc :global(h4) { margin: 16px 0 4px; font: 700 15px Lato, sans-serif; color: var(--ink); }
   .doc :global(p) { margin: 0 0 12px; }
   .doc :global(ul), .doc :global(ol) { margin: 0 0 14px; padding-left: 20px; }
+  .doc :global(ul) { list-style: disc; }
+  .doc :global(ol) { list-style: decimal; }
   .doc :global(li) { margin: 5px 0; }
   .doc :global(li::marker) { color: var(--ink3); }
   .doc :global(strong) { color: var(--ink); font-weight: 700; }
@@ -125,12 +139,49 @@ const pageDescription = `Senior Cloud Engineer with ${yearsInTech}+ years of exp
   .resume-foot__back:hover { color: var(--accent); }
   .resume-foot__mail { font: 400 12px "JetBrains Mono", monospace; color: var(--ink3); }
 
+  /* Short lists straight under a section heading (certs, skills) go two-up. */
+  @media (min-width: 700px) {
+    .doc :global(h2 + ul) { columns: 2; column-gap: 32px; }
+    .doc :global(h2 + ul li) { break-inside: avoid; margin-top: 0; }
+  }
+
+  .resume-tools { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .resume-tools__print {
+    display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+    font: 700 13px Lato, sans-serif; color: var(--ink2);
+    background: var(--card); border: 1px solid var(--line2);
+    border-radius: 8px; padding: 7px 12px;
+  }
+  .resume-tools__print:hover { color: var(--ink); border-color: var(--accent); }
+
+  /* Print: interface-free, black on white, system fonts every printer/PDF
+     engine has, A4 with US-Letter-safe margins. Applies to Ctrl+P too. */
   @media print {
-    html { font-size: 12px; }
-    @page { margin: 1.5cm; }
-    .doc { color: #000; }
-    .doc :global(h1), .doc :global(h3), .doc :global(h4), .doc :global(strong) { color: #000; }
-    .doc :global(h2) { color: #333; border-bottom-color: #ccc; }
-    .doc :global(a) { color: #000; text-decoration: underline; }
+    @page { size: A4; margin: 14mm 15mm; }
+    :global(html), :global(body) { background: #fff !important; }
+    :global(html) {
+      --ink: #000; --ink2: #111; --ink3: #444; --line: #bbb; --line2: #999; --link: #000;
+    }
+    .doc, .doc :global(*) {
+      font-family: Arial, Helvetica, "Liberation Sans", sans-serif !important;
+      color: #000 !important;
+    }
+    .doc { font-size: 10pt; line-height: 1.38; }
+    .doc :global(h1) { font-size: 20pt; font-weight: 700; letter-spacing: 0; margin-bottom: 2pt; }
+    .doc :global(h1 + p) { margin-bottom: 4pt; }
+    .doc :global(h2) {
+      font-size: 10.5pt; font-weight: 700; letter-spacing: .06em;
+      margin: 12pt 0 5pt; padding-bottom: 2pt; border-bottom: 0.75pt solid #000;
+      break-after: avoid;
+    }
+    .doc :global(h3) { font-size: 11pt; margin: 9pt 0 1pt; break-after: avoid; }
+    .doc :global(h3 + p) { break-after: avoid; }
+    .doc :global(em) { font-size: 9.5pt; font-style: italic; color: #333 !important; }
+    .doc :global(p) { margin: 0 0 5pt; }
+    .doc :global(ul) { margin: 0 0 6pt; padding-left: 14pt; }
+    .doc :global(li) { margin: 1.5pt 0; break-inside: avoid; }
+    .doc :global(a) { text-decoration: none; }
+    .doc :global(code) { background: none; border: 0; padding: 0; }
+    .doc :global(h2 + ul) { columns: 2; column-gap: 18pt; }
   }
 </style>

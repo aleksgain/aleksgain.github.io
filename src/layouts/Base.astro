@@ -24,7 +24,7 @@ interface Props {
 
 const {
   title,
-  description = 'Alex Gain - Senior Cloud Engineer and DevSecOps Specialist with expertise in AWS, GCP, and Kubernetes',
+  description = 'Alex Gain - Senior Cloud Engineer and DevSecOps Specialist with expertise in AWS, Azure, GCP, and Kubernetes',
   image = '/images/profile.jpg',
   type = 'website',
   canonicalUrl = Astro.url.href,
@@ -32,14 +32,14 @@ const {
 
 const personSchema = {
   name: 'Alexey Gain',
-  jobTitle: 'Senior Cloud Engineer / Technical Lead',
+  jobTitle: 'Technical Architect / Senior Cloud Engineer',
   url: Astro.url.origin,
   sameAs: [
     `https://www.linkedin.com/in/${personalData.linkedInUsername}`,
     `https://github.com/${personalData.githubUsername}`,
   ],
   knowsAbout: [
-    'AWS', 'Google Cloud Platform', 'Kubernetes', 'DevOps', 'Cloud Security',
+    'AWS', 'Microsoft Azure', 'Google Cloud Platform', 'Kubernetes', 'DevOps', 'Cloud Security',
     'Infrastructure as Code', 'Terraform', 'CI/CD', 'SRE', 'Docker',
   ],
 };

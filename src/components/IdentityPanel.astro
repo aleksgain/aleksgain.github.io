@@ -1,10 +1,11 @@
 ---
+import { yearsInTech as calcYears } from '../data/career';
 // src/components/IdentityPanel.astro — the left column: identity, stats, certs, resume, links
 import personal from '../data/personal.json';
 import certifications from '../data/certifications.json';
 
 const badges = certifications.badges;
-const yearsInTech = new Date().getFullYear() - personal.graduationYear + 1;
+const yearsInTech = calcYears();
 
 // The commit count is filled in client-side from /api/github-stats.json
 // (see the script below) so the panel never bakes a stale number into the
